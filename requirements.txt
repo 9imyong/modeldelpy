@@ -4,5 +4,12 @@ jinja2
 python-multipart
 fastapi-csrf-protect
 pydantic<2.0.0
-passlib
 passlib[bcrypt]
+pillow
+ultralytics
+pytesseract
+httpx
+onnxruntime
+torchserve
+numpy==1.23.4
+opencv-python
