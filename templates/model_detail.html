@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Classification 모델 상세</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+  <div class="dashboard-container">
+    <h1>Classification 모델 상세: {{ item.name }} (v{{ item.version }})</h1>
+    <p>모델 타입: {{ item.type.value }}</p>
+
+    <form action="/models/infer" method="post" enctype="multipart/form-data">
+      <input type="hidden" name="id" value="{{ item.id }}">
+      <label>입력 데이터 업로드:</label>
+      <input type="file" name="file" required>
+      <button type="submit">추론 실행</button>
+    </form>
+
+    {% if result %}
+    <div class="result-container">
+      <h2>추론 결과</h2>
+      {% if result.predictions %}
+      <ul>
+        {% for pred in result.predictions %}
+        <li>클래스 ID: {{ pred.class_id }}, 신뢰도: {{ pred.confidence }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    <a href="/models">목록으로 돌아가기</a>
+  </div>
+</body>
+</html>

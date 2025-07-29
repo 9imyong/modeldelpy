@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OCR 모델 상세</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+  <div class="dashboard-container">
+    <h1>OCR 모델 상세: {{ item.name }} (v{{ item.version }})</h1>
+    <p>모델 타입: {{ item.type.value }}</p>
+
+    <form action="/models/ocr/infer" method="post" enctype="multipart/form-data">
+      <input type="hidden" name="id" value="{{ item.id }}">
+      <label>이미지 업로드 (OCR):</label>
+      <input type="file" name="file" accept="image/*" required>
+      <button type="submit">OCR 실행</button>
+    </form>
+
+    {% if request.query_params.get('result') %}
+    {% set result = request.query_params.get('result') | safe %}
+    <div class="result-container">
+      <h2>OCR 결과</h2>
+      <p>인식 텍스트:</p>
+      <pre>{{ result.text }}</pre>
+      <p>신뢰도: {{ result.confidence }}</p>
+    </div>
+    {% endif %}
+
+    <a href="/models/ocr">OCR 목록으로 돌아가기</a>
+  </div>
+</body>
+</html>

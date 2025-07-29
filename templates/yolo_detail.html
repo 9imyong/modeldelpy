@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YOLO 모델 상세</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+  <div class="dashboard-container">
+    <h1>YOLO Detection 모델 상세: {{ item.name }} (v{{ item.version }})</h1>
+    <p>모델 타입: {{ item.type.value }}</p>
+
+    <form action="/models/yolo/infer" method="post" enctype="multipart/form-data">
+      <input type="hidden" name="id" value="{{ item.id }}">
+      <label>이미지 업로드:</label>
+      <input type="file" name="file" accept="image/*" required>
+      <button type="submit">YOLO 추론 실행</button>
+    </form>
+
+    {% if request.query_params.get('result') %}
+    {% set result = request.query_params.get('result') | safe %}
+    <div class="result-container">
+      <h2>추론 결과</h2>
+      <ul>
+        {% for pred in result.predictions %}
+        <li>클래스 ID: {{ pred.class_id }}, 신뢰도: {{ pred.confidence }}, 박스: {{ pred.bbox }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+
+    <a href="/models/yolo">YOLO 목록으로 돌아가기</a>
+  </div>
+</body>
+</html>
