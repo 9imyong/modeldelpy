@@ -8,8 +8,11 @@ from ultralytics import YOLO
 def get_yolo_model_path() -> Path:
     path = Path("models_storage\\yolov11n.pt")
     if not path.exists():
-        raise HTTPException(status_code=500, detail=f"YOLO model file not found: {path}")
-    return path
+        without_model = Path("models_storage\\")
+        model = YOLO(without_model+"yolo11n.yaml")
+        model = YOLO(without_model+"yolo11n.pt")
+        # raise HTTPException(status_code=500, detail=f"YOLO model file not found: {path}")
+    return model
 
 # 지연 로드 방식으로 모델 로드
 _model = None
@@ -17,9 +20,8 @@ _model = None
 def get_model() -> YOLO:
     global _model
     if _model is None:
-        model_path = get_yolo_model_path()
+        model = get_yolo_model_path()
         try:
-            _model = YOLO(str(model_path))
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Failed to load YOLO model: {e}")
     return _model
