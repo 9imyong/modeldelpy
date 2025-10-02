@@ -1,6 +1,5 @@
 # Python
 __pycache__/
-**/**.pyc
 *.py[cod]
 *.sqlite3
 *.log
@@ -26,9 +25,6 @@ Thumbs.db
 *.egg-info/
 build/
 dist/
-
-# Model files
 **/**.pt
-
-# Environment files
-**/**.env
+**/**.pyc
+*/**.env
