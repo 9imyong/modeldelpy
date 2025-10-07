@@ -24,12 +24,9 @@ def get_model() -> YOLO:
     if _model is None:
         model = get_yolo_model_path()
         try:
-<<<<<<< HEAD
-=======
             _model = YOLO("yolo11n.yaml")
             _model = YOLO("models_storage/yolo11n.pt")
             print("YOLO model loaded successfully.")
->>>>>>> yolo
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Failed to load YOLO model: {e}")
     return _model
