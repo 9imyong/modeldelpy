@@ -116,3 +116,7 @@ __output__/
 __cache__/
 
 **.jpg
+config/__pycache__/settings.cpython-39.pyc
+models/__pycache__/model_item.cpython-39.pyc
+routers/__pycache__/models.cpython-39.pyc
+utils/__pycache__/security.cpython-39.pyc
