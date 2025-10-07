@@ -17,6 +17,6 @@ async def yolo_list(request: Request):
     # Detection(D#ETECTION) 타입 모델만 필터링
     items = list_by_type(ModelType.DETECTION)
     return templates.TemplateResponse(
-        "dashboard.html",
+        "yolo_detail.html",
         {"request": request, "items": items, "filter": "Detection"}
     )

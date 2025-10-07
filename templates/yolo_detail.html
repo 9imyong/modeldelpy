@@ -11,26 +11,37 @@
     <h1>YOLO Detection 모델 상세: {{ item.name }} (v{{ item.version }})</h1>
     <p>모델 타입: {{ item.type.value }}</p>
 
-    <form action="/models/yolo/infer" method="post" enctype="multipart/form-data">
+    <form action="/yolo/infer" method="post" enctype="multipart/form-data">
       <input type="hidden" name="id" value="{{ item.id }}">
       <label>이미지 업로드:</label>
       <input type="file" name="file" accept="image/*" required>
       <button type="submit">YOLO 추론 실행</button>
     </form>
 
-    {% if request.query_params.get('result') %}
-    {% set result = request.query_params.get('result') | safe %}
-    <div class="result-container">
-      <h2>추론 결과</h2>
+    <!-- {% if result %}
+      <div class="result-container">
+        <h2>추론 결과</h2>
+        <ul>
+          {% for pred in result.predictions %}
+            <li>클래스 ID: {{ pred.class_id }}, 신뢰도: {{ pred.confidence }}, 박스: {{ pred.bbox }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %} -->
+    {% if result %}
+      <h2>YOLO 결과 ({{ result.counts.detections }})</h2>
+      {% if result.visualization %}
+        <img src="{{ result.visualization }}" style="max-width:100%;height:auto;">
+      {% endif %}
       <ul>
-        {% for pred in result.predictions %}
-        <li>클래스 ID: {{ pred.class_id }}, 신뢰도: {{ pred.confidence }}, 박스: {{ pred.bbox }}</li>
+        {% for p in result.predictions %}
+          <li>{{ p.name }} ({{ "%.2f"|format(p.confidence) }}) — [{{ p.bbox[0]|int }}, {{ p.bbox[1]|int }}, {{ p.bbox[2]|int }}, {{ p.bbox[3]|int }}]</li>
         {% endfor %}
       </ul>
-    </div>
     {% endif %}
 
-    <a href="/models/yolo">YOLO 목록으로 돌아가기</a>
+
+    <a href="/models">모델 목록으로 돌아가기</a>
   </div>
 </body>
 </html>
