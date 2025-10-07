@@ -38,14 +38,29 @@ async def models_by_type(request: Request, model_type: ModelType):
     )
 
 @router.get("/{id}", include_in_schema=False)
-async def model_detail(request: Request, id: int, result: Optional[Dict[str, Any]] = None):
+async def model_detail(
+    request: Request,
+    id: int,
+    result: Optional[Dict[str, Any]] = None
+):
     item = get_item(id)
     if not item:
         raise HTTPException(status_code=404, detail="Model not found")
+
+    # Enum → 문자열
+    item_type = item.type.value if item.type else None
+    template_map = {
+        "detection": "yolo_detail.html",
+        "ocr": "ocr_detail.html",
+        "classification": "classification_detail.html",  # 필요하면 추가
+    }
+    template_name = template_map.get(item_type, "model_detail.html")
+
     return templates.TemplateResponse(
-        "model_detail.html",
-        {"request": request, "item": item, "result": result}
+        template_name,
+        {"request": request, "item": item, "result": result},
     )
+
 
 @router.post("/infer", include_in_schema=False)
 async def models_infer(
@@ -64,4 +79,7 @@ async def models_infer(
         result = await infer_yolo(file)
     else:
         result = {"error": "Unsupported model type"}
-    return RedirectResponse(url=f"/models/{id}?result={result}", status_code=303)
+    return templates.TemplateResponse(
+        "yolo_detail.html",
+    {"request": request, "item": item, "result": result},  # dict 그대로!
+)
